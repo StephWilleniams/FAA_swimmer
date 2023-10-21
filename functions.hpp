@@ -29,15 +29,20 @@ void zero_IVP(int ns, double x[][3]){
     return;
 }
 
+// Artificial seeder to have two particles input to collide.
 void partpair_tester_IVP(int ns, double x[][3]){
     
+    double pi = 3.14159265;
+
+    // Particle 1.
     x[0][0]=0;
     x[0][1]=0;
-    x[0][2]=0.5*3.141592;
+    x[0][2]=0.5*pi;
 
+    // Particle 2.
     x[1][0]=0;
     x[1][1]=5;
-    x[1][2]=1.5*3.141593;
+    x[1][2]=1.5*pi;
 
     return;
 }
