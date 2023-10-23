@@ -5,8 +5,10 @@ Title: Three body microswimmer.
 // Private header files
 #include "header.hpp"
 #include "constants.hpp"
-#include "rng.hpp"
 #include "functions.hpp"
+#include "functions_rng.hpp"
+#include "functions_IVP.hpp"
+#include "functions_overhead.hpp"
 
 int main() 
 {

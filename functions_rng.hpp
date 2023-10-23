@@ -1,5 +1,5 @@
-#ifndef rng
-#define rng
+#ifndef functions_rng
+#define functions_rng
 
 #include "header.hpp"
 
