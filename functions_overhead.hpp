@@ -20,14 +20,23 @@ ofstream initialise_file(string inputString){
     return outputFile;
 }
 
-void output_pos(double t, int ns, double x[][3], double NDL, double NDT, ofstream& outfile){
+void output_pos(double t, int ns, double xs[][3], int nc, double xc[][2], double NDL, double NDT, ofstream& outfile_active, ofstream& outfile_passive){
     for (int n=0; n<ns; n++){ // Loop over particle index.
-        outfile << t << ' ' << n+1;
+        outfile_active << t << ' ' << n+1;
         for (int i=0; i<3; i++){ // Loop over dimension.
-            outfile << ' ' << x[n][i];
+            outfile_active << ' ' << xs[n][i];
         }
-        outfile << endl;
+        outfile_active << endl;
     }
+
+    for (int n=0; n<nc; n++){ // Loop over particle index.
+        outfile_passive << t << ' ' << n+1;
+        for (int i=0; i<2; i++){ // Loop over dimension.
+            outfile_passive << ' ' << xc[n][i];
+        }
+        outfile_passive << endl;
+    }
+
     return;
 }
 

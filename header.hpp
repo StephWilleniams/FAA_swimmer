@@ -8,6 +8,7 @@
 #include <cmath>
 #include <fstream>
 #include <string>
+// #include "/opt/homebrew/Cellar/libomp/17.0.6/include/omp.h"
 
 // Namespaces
 using namespace std; 
