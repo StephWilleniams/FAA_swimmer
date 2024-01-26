@@ -5,9 +5,9 @@
 #include "functions_rng.hpp"
 
 // WCA potential, 3-part active particle, includes passive.
-void WCA_force_2(int na, double Fa[][3], double xa[][3], double rA, double rSeg[], double sDV[], int np, double Fp[][2], double xp[][2], double rP, double xR, double xL, double yB, double yT){
+void WCA_force_2(int na, double Fa[][3], double xa[][4], double rA, double rSeg[], double sDV[], int np, double Fp[][2], double xp[][2], double rP, double xR, double xL, double yB, double yT){
 
-    double sigma; double eps = 0.05;
+    double sigma; double eps = 0.005;
     double r; double x1; double x2; double y1; double y2; double y3; double dx; double dy;
 
     // Calulate the forces on the active particles.
@@ -116,14 +116,11 @@ void WCA_force_2(int na, double Fa[][3], double xa[][3], double rA, double rSeg[
         }
 
         // Get comparisons of the passive-boundary forces.
-
         sigma = rP; // Get the interaction parameter.
-
         // Get the coordinates of the relative segments.
         y1 = xp[n1][1];
         y2 = yT;
         y3 = yB;
-
         if(abs(y3-y1) > abs(y2-y1)){dy = y2-y1;}else{dy = y3-y1;} // Get wrapped y.
         r = abs(dy); // Get the distance to the boundary.
         Fp[n1][1] -= (24*eps*dy/pow(r,2))*(1*pow(sigma/r,6)-2*pow(sigma/r,12)); // Implement the force.
@@ -139,7 +136,7 @@ void WCA_force_2(int na, double Fa[][3], double xa[][3], double rA, double rSeg[
 /* /////////////// */
 
 // Stochastic Runge-Kutta scheme, 2nd order.
-void update_pos_RKII(int na, double xa[][3], double rA, double rSeg[], double sDV[], int np, double xp[][2], double rP, double vS, double sigR, double sigT, double xL, double xR, double yB, double yT, double f0, double fR, double fricPar, double fricPerp, double dT, double DT, mt19937& gen){
+void update_pos_RKII(int na, double xa[][4], double rA, double rSeg[], double sDV[], int np, double xp[][2], double rP, double vS, double sigR, double sigT, double xL, double xR, double yB, double yT, double f0, double fR, double fricPar, double fricPerp, double kickFreq, double kickStr, double dT, double DT, mt19937& gen){
     
     // Active forces
     double    F1a[na][4];
@@ -152,7 +149,7 @@ void update_pos_RKII(int na, double xa[][3], double rA, double rSeg[], double sD
     double     Fp[np][2]; // Forces store.
 
     // Position stores
-    double xtemp_a[na][3]; // Temporary position store.
+    double xtemp_a[na][4]; // Temporary position store.
     double xtemp_p[np][2]; // Temporary position store.
 
     // Friction array stores
@@ -170,16 +167,15 @@ void update_pos_RKII(int na, double xa[][3], double rA, double rSeg[], double sD
         storeB = (fricPar - fricPerp)*ct*st;storeC = storeB;
         storeD = fricPar*pow(st,2) + fricPerp*(1-pow(st,2));
         det = 1/(f0*(storeA*storeD - storeB*storeC)); // Get determinant of friction tensor.
-        // Apply the inverse to the components of the calculated force.
+        // Apply the mobility (inverse friction) to the components of the calculated force.
         fx = det*(storeD*Fa[n][0] - storeB*Fa[n][1])*pow(dT,2);
         fy = det*(-storeC*Fa[n][0] + storeA*Fa[n][1])*pow(dT,2);
 
-        // Implement fx and fy here.
+        // Implement noise, kicks, fx, fy, and ftheta here.
         F1a[n][0] = vS*dT*cos(xa[n][2]) - fx;
         F1a[n][1] = vS*dT*sin(xa[n][2]) - fy;
-        // Scattering event here.
-        F1a[n][3] = nrand(0,sigR,gen);
-        F1a[n][2] = F1a[n][3] + (1/(fR*f0))*Fa[n][2];
+        F1a[n][3] = nrand(0,sigR,gen); // Generate and store noise.
+        F1a[n][2] = F1a[n][3] + (1/(fR*f0))*Fa[n][2] + kickStr*cos(xa[n][2])/abs(cos(xa[n][2]))*xa[n][3];
 
         // Get intermediate position.
         xtemp_a[n][0] = xa[n][0] + F1a[n][0];
@@ -187,9 +183,9 @@ void update_pos_RKII(int na, double xa[][3], double rA, double rSeg[], double sD
         xtemp_a[n][2] = xa[n][2] + F1a[n][2];
 
         // Boundary conditions.
-        xtemp_a[n][0] = xtemp_a[n][0] - (xR-xL)*((xtemp_a[n][0])/abs(xtemp_a[n][0]))*floor(abs(xtemp_a[n][0])/xR);
-        xtemp_a[n][1] = xtemp_a[n][1] - (yT-yB)*((xtemp_a[n][1])/abs(xtemp_a[n][1]))*floor(abs(xtemp_a[n][1])/yT);
-        xtemp_a[n][2] = xtemp_a[n][2] - (20*M_PI)*(xtemp_a[n][2]/abs(xtemp_a[n][2]))*floor(abs(xtemp_a[n][2])/(10*M_PI));
+        xtemp_a[n][0] = xtemp_a[n][0] - (xR-xL)*floor((xtemp_a[n][0]+xR)/(xR-xL));
+        xtemp_a[n][1] = xtemp_a[n][1] - (yT-yB)*floor((xtemp_a[n][1]+yT)/(yT-yB));
+        xtemp_a[n][2] = xtemp_a[n][2] - (20*M_PI)*floor((xtemp_a[n][2]+10*M_PI)/(20*M_PI));
     }
     // Get F1, passive.
     for (int n=0; n<np; n++){ // Loop over particle index.
@@ -204,8 +200,8 @@ void update_pos_RKII(int na, double xa[][3], double rA, double rSeg[], double sD
         xtemp_p[n][1] = xp[n][1] + F1p[n][1] + F1p[n][3];
 
         // Boundary conditions.
-        xtemp_p[n][0] = xtemp_p[n][0] - (xR-xL)*((xtemp_p[n][0])/abs(xtemp_p[n][0]))*floor(abs(xtemp_p[n][0])/xR);
-        xtemp_p[n][1] = xtemp_p[n][1] - (yT-yB)*((xtemp_p[n][1])/abs(xtemp_p[n][1]))*floor(abs(xtemp_p[n][1])/yT);
+        xtemp_p[n][0] = xtemp_p[n][0] - (xR-xL)*floor((xtemp_p[n][0]+xR)/(xR-xL));
+        xtemp_p[n][1] = xtemp_p[n][1] - (yT-yB)*floor((xtemp_p[n][1]+yT)/(yT-yB));
     }
 
     WCA_force_2(na,Fa,xtemp_a,rA,rSeg,sDV,np,Fp,xtemp_p,rP,xR,xL,yB,yT); // Intermediate particle potentials.
@@ -224,11 +220,10 @@ void update_pos_RKII(int na, double xa[][3], double rA, double rSeg[], double sD
         fx = det*(storeD*Fa[n][0] - storeB*Fa[n][1])*pow(dT,2);
         fy = det*(-storeC*Fa[n][0] + storeA*Fa[n][1])*pow(dT,2);
 
-        // Implement fx and fy here.
+        // Implement kicks, fx, fy, and ftheta here (noise is not needed).
         F2a[n][0] = vS*dT*cos(xa[n][2]+F1a[n][2]) - fx;
         F2a[n][1] = vS*dT*sin(xa[n][2]+F1a[n][2]) - fy;
-        // Scattering event here.
-        F2a[n][2] = (1/(fR*f0))*Fa[n][2];
+        F2a[n][2] = (1/(fR*f0))*Fa[n][2] + kickStr*cos(xa[n][2])/abs(cos(xa[n][2]))*xa[n][3];
     }
 
     // Get F2, passive.
@@ -239,16 +234,21 @@ void update_pos_RKII(int na, double xa[][3], double rA, double rSeg[], double sD
 
     // Get x(t+\delta{t}), active.
     for (int n=0; n<na; n++){ // Loop over particle index.
+
         // Get RKII-displacement.
         xa[n][0] += 0.5*(F1a[n][0] + F2a[n][0]);
         xa[n][1] += 0.5*(F1a[n][1] + F2a[n][1]);
-        // Scattering event here.
+        if( (xa[n][1] > yT - 1.5*rA) || (xa[n][1] < yB + 1.5*rA) ){
+            xa[n][3] = ((xa[n][1])/abs(xa[n][1]))*max(xa[n][3],ceil(urand(0,1,gen)-(exp(-kickFreq)))); // Determine if a kick is happening or if one is initiated.
+        } else {
+            xa[n][3] = 0;
+        }
         xa[n][2] += 0.5*(F1a[n][2] + F2a[n][2]) + F1a[n][3];
         
         // Boundary conditions.
-        xa[n][0] = xa[n][0] - (xR-xL)*(xa[n][0]/abs(xa[n][0]))*floor(abs(xa[n][0])/xR);
-        xa[n][1] = xa[n][1] - (yT-yB)*(xa[n][1]/abs(xa[n][1]))*floor(abs(xa[n][1])/yT);
-        xa[n][2] = xa[n][2] - (20*M_PI)*(xa[n][2]/abs(xa[n][2]))*floor(abs(xa[n][2])/(10*M_PI));
+        xa[n][0] = xa[n][0] - (xR-xL)*floor((xa[n][0]+xR)/(xR-xL));
+        xa[n][1] = xa[n][1] - (yT-yB)*floor((xa[n][1]+yT)/(yT-yB));
+        xa[n][2] = xa[n][2] - (20*M_PI)*floor((xa[n][2]+10*M_PI)/(20*M_PI));
     }
 
     // Get x(t+\delta{t}), passive.
@@ -258,53 +258,9 @@ void update_pos_RKII(int na, double xa[][3], double rA, double rSeg[], double sD
         xp[n][1] += 0.5*(F1p[n][1] + F2p[n][1]) + F1p[n][3];
         
         // Boundary conditions.
-        xp[n][0] = xp[n][0] - xR*((xp[n][0])/abs(xp[n][0]))*floor(abs(xp[n][0])/xR);
-        xp[n][1] = xp[n][1] - yT*((xp[n][1])/abs(xp[n][1]))*floor(abs(xp[n][1])/yT);
+        xp[n][0] = xp[n][0] - (xR-xL)*floor((xp[n][0]+xR)/(xR-xL));
+        xp[n][1] = xp[n][1] - (yT-yB)*floor((xp[n][1]+yT)/(yT-yB));
     }
-
-}
-
-// Even higher order solver?
-
-/* /////////////// */
-/* Older functions */
-/* /////////////// */
-
-// Basic implementation. Forward Euler. Not maintained.
-void update_pos_basic(int na,double x[][3], double vS, double sigR, double xL, double xR, double yB, double yT, double dT, mt19937& gen){
-    for (int n=0; n<na; n++){ // Loop over particle index.
-        x[n][0]+= vS*dT*cos(x[n][2]); 
-        x[n][1]+= vS*dT*sin(x[n][2]); 
-        x[n][2]+= nrand(0,sigR,gen); 
-    }
-    return;
-}
-
-// WCA potential, 1-part active particle, no passive, old.
-void WCA_force(int na, double F[][3], double x[][3], double xR, double xL, double yB, double yT){
-
-    double sigma = 1; double eps = 1;
-    double r; double dx; double dy;
-
-    for(int n1=0; n1<na; n1++){
-        F[n1][0] = 0;
-        F[n1][1] = 0;
-        for(int n2=0; n2<na; n2++){
-            if(n1 != n2){
-                dx = x[n2][0]-x[n1][0];
-                dy = x[n2][1]-x[n1][1];
-                if(abs(dx) > (xR-xL)/2){dx = (dx/abs(dx))*(abs(dx) - (xR-xL)) ;}
-                if(abs(dy) > (yT-yB)/2){dy = (dy/abs(dy))*(abs(dx) - (yT-yB)) ;}
-                r = sqrt(pow(dx,2) + pow(dy,2));
-                if( r < sigma ){
-                    F[n1][0] -= (24*eps*dx/pow(r,2))*(1*pow(sigma/r,6)-2*pow(sigma/r,12));
-                    F[n1][1] -= (24*eps*dy/pow(r,2))*(1*pow(sigma/r,6)-2*pow(sigma/r,12));
-                }
-            }
-        }
-    }
-
-    return;
 }
 
 #endif // 

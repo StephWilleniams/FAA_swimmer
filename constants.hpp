@@ -6,7 +6,7 @@
 // Note: Captialized variables are dimensional (lower case ND).
 
 // Time constants (s).
-double T = 100; // Total runtime (s).
+double T = 5; // Total runtime (s).
 double DT = 0.0005; // Step size (s) (ND time). 
 // Time constants ND.
 double dT = DT/DT;
@@ -51,14 +51,20 @@ double a = 1.6; // Aspect ratio.
 double f0 = 3; // Base friction.
 double fR = M_PI*pow(a,2)/(3*(log(a) - 0.662 + (0.917/a)-(0.050/pow(a,2)))); // Rotational friction scaling.
 double fricPar = 2*M_PI/(log(a) - 0.207 + (0.980/a)-(0.133/pow(a,2)));
-double fricPerp = 4*M_PI/(log(a) + 0.839 + (0.185/a)+(0.233/pow(a,2))); ;
+double fricPerp = 4*M_PI/(log(a) + 0.839 + (0.185/a)+(0.233/pow(a,2)));
+
+// Kick parameters
+double KickFreq = 10000; // Kick poisson-process frequency.
+double kickFreq = KickFreq*dT; // ND kick-frequency.
+double KickStr = -0.1; // Kick rotational 'speed'.
+double kickStr = KickStr*dT; // ND kick rotation per frame.
 
 // ND constants.
 const int na = 10; // Number of swimmers
 const int np = 10; // Number of colloids
 
-// arrays.
-double xa[na][3]; // Store for swimmer center positions.
+// Arrays.
+double xa[na][4]; // Store for swimmer center positions.
 double xp[np][2]; // Store for colloid positions.
 
 #endif // 
