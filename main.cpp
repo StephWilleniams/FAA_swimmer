@@ -31,12 +31,13 @@ int main()
 
     //zero_IVP(ns,x); // All particles at (x,y)=(0,0).
     //partpair_tester_IVP(ns,xs);
-    no_OL_IVP(ns, xs, np, xp, xL, xR, yB, yT, rA, rP, gen); // Uniform distribution, non-overlapping.
-    output_pos(-1,ns,xs,np,xp,RA,DT,outfile_active,outfile_passive); // Output active particle positions.
+    set_active_geometry(pol,rSeg,sDV);
+    no_OL_IVP(na, xa, np, xp, xL, xR, yB, yT, rA, rP, gen); // Uniform distribution, non-overlapping.
+    output_pos(-1,na,xa,np,xp,RA,DT,outfile_active,outfile_passive); // Output active particle positions.
 
     for(int t=0; t<nSteps; t++){
-        update_pos_RKII(ns,xs,rA,rSeg,sDV,polarization,np,xp,rP,vA,sigR,sigT,xL,xR,yB,yT,dT,DT,gen); // Increment particle positions.
-        if((t % 1)==0) {output_pos(t,ns,xs,np,xp,RA,DT,outfile_active,outfile_passive);}; // Output particle positions.
+        update_pos_RKII(na,xa,rA,rSeg,sDV,np,xp,rP,vA,sigR,sigT,xL,xR,yB,yT,f0,fR,fricPar,fricPerp,dT,DT,gen); // Increment particle positions.
+        if((t % 10)==0) {output_pos(t,na,xa,np,xp,RA,DT,outfile_active,outfile_passive);}; // Output particle positions.
     }
 
     outfile_active.close(); // Finalise output.

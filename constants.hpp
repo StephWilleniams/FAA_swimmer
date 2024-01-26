@@ -6,7 +6,7 @@
 // Note: Captialized variables are dimensional (lower case ND).
 
 // Time constants (s).
-double T = 1; // Total runtime (s).
+double T = 100; // Total runtime (s).
 double DT = 0.0005; // Step size (s) (ND time). 
 // Time constants ND.
 double dT = DT/DT;
@@ -26,9 +26,11 @@ double yT = YT/RA;
 double yB = YB/RA;
 double rA = RA/RA;
 double rP = RP/RA;
-// Particle segement sizes (ND)
-double rSeg[3] = {(4*sqrt(2)/(5*sqrt(2)+2))*rA,(4*sqrt(2)/(5*sqrt(2)+2))*rA/sqrt(2),(4*sqrt(2)/(5*sqrt(2)+2))*rA/2};
-double  sDV[3] = {(rSeg[0] - rA), (rSeg[0]*2 - rA),(rSeg[0]*2 + rSeg[1] - rA)};
+
+// Particle segement sizes (ND).
+int pol = -1; // Active particle polarisation. +1 for pusher, -1 for puller.
+double rSeg[3];
+double  sDV[3];
 
 // Velocity constants (um/s).
 double VA = 100; // Swimmer speed.
@@ -36,7 +38,7 @@ double VA = 100; // Swimmer speed.
 double vA = VA*DT/RA;
 
 // Diffusion constants (xx^2/s).
-double DR = 0.1; // Swimmer rotational diffusivity, rad^2/s.
+double DR = 0.2; // Swimmer rotational diffusivity, rad^2/s.
 double DTherm = 0.1; // Passive particle diffusivity, um^2/s.
 // Diffusion constants ND.
 double dR = DR*DT; 
@@ -44,13 +46,19 @@ double dTherm = DTherm*DT/pow(RA,2);
 double sigR = sqrt(dR);
 double sigT = sqrt(4*dTherm*dT);
 
-// ND constants
-const int ns = 1; // Number of swimmers
-const int np = 1; // Number of colloids
-const int polarization = 1; // Active particle polarisation. +1 for pusher, -1 for puller.
+// Friction constants.
+double a = 1.6; // Aspect ratio.
+double f0 = 3; // Base friction.
+double fR = M_PI*pow(a,2)/(3*(log(a) - 0.662 + (0.917/a)-(0.050/pow(a,2)))); // Rotational friction scaling.
+double fricPar = 2*M_PI/(log(a) - 0.207 + (0.980/a)-(0.133/pow(a,2)));
+double fricPerp = 4*M_PI/(log(a) + 0.839 + (0.185/a)+(0.233/pow(a,2))); ;
+
+// ND constants.
+const int na = 10; // Number of swimmers
+const int np = 10; // Number of colloids
 
 // arrays.
-double xs[ns][3]; // Store for swimmer center positions.
+double xa[na][3]; // Store for swimmer center positions.
 double xp[np][2]; // Store for colloid positions.
 
 #endif // 

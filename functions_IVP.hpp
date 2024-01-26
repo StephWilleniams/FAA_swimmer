@@ -4,6 +4,24 @@
 #include "header.hpp"
 #include "functions_rng.hpp"
 
+void set_active_geometry(double pol, double rSeg[], double sDV[]){
+    if (pol == 1) {
+        rSeg[0] = (4*sqrt(2)/(5*sqrt(2)+2))*rA;
+        rSeg[1] = (4*sqrt(2)/(5*sqrt(2)+2))*rA/sqrt(2);
+        rSeg[2] = (4*sqrt(2)/(5*sqrt(2)+2))*rA/2;
+        sDV[0]  = double(pol)*(rSeg[0] - rA);
+        sDV[1]  = double(pol)*(rSeg[0]*2 - rA);
+        sDV[2]  = double(pol)*(rSeg[0]*2 + rSeg[1] - rA);
+    } else {
+        rSeg[0] = (4*sqrt(2)/(5*sqrt(2)+2))*rA;
+        rSeg[1] = (4*sqrt(2)/(5*sqrt(2)+2))*rA/sqrt(2);
+        rSeg[2] = (4*sqrt(2)/(5*sqrt(2)+2))*rA/2;
+        sDV[0]  = double(pol)*(rSeg[0] - rA);
+        sDV[1]  = double(pol)*(rSeg[0]*2 - rA);
+        sDV[2]  = double(pol)*(rSeg[0]*2 + rSeg[1] - rA);
+    }
+}
+
 void zero_IVP(int ns, double x[][3]){
     for (int n=0; n<ns; n++){ // Loop over particle index.
         for (int i=0; i<3; i++){ // Loop over dimension.
