@@ -36,21 +36,21 @@ double VA = 100; // Swimmer speed.
 double vA = VA*DT/RA;
 
 // Diffusion constants (xx^2/s).
-double DR = 0; // Swimmer rotational diffusivity, rad^2/s.
+double DR = 0.1; // Swimmer rotational diffusivity, rad^2/s.
 double DTherm = 0.1; // Passive particle diffusivity, um^2/s.
 // Diffusion constants ND.
-double dR = DR*DTherm; 
-double dTherm = DTherm*DTherm/pow(RA,2); 
+double dR = DR*DT; 
+double dTherm = DTherm*DT/pow(RA,2); 
 double sigR = sqrt(dR);
-double sigT = sqrt(dT);
+double sigT = sqrt(4*dTherm*dT);
 
 // ND constants
-const int ns = 2; // Number of swimmers
-const int np = 0; // Number of colloids
+const int ns = 1; // Number of swimmers
+const int np = 1; // Number of colloids
 const int polarization = 1; // Active particle polarisation. +1 for pusher, -1 for puller.
 
 // arrays.
 double xs[ns][3]; // Store for swimmer center positions.
-double xp[ns][2]; // Store for colloid positions.
+double xp[np][2]; // Store for colloid positions.
 
 #endif // 

@@ -4,6 +4,8 @@ un = unique(A(:,1));
 
 close all
 
+rA = 1;
+
 rL = (4*sqrt(2)/(5*sqrt(2)+2))*rA;
 rM = rL/sqrt(2);
 rS = rL/2;

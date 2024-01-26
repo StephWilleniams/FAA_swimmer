@@ -8,7 +8,5 @@ This is done according to a 2nd order Stochastic Runge-Kutta numerical scheme.
 
 # Tasks
 - Add straight boundaries.
-- Include swimmers with shape. Possibly, add it as a class?
 - Include torques into the shaped swimmer motion.
-- Include passive particles.
 - This about how to add in interestingly shaped boundaries.
