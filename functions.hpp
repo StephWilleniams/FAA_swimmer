@@ -175,7 +175,7 @@ void update_pos_RKII(int na, double xa[][4], double rA, double rSeg[], double sD
         F1a[n][0] = vS*dT*cos(xa[n][2]) - fx;
         F1a[n][1] = vS*dT*sin(xa[n][2]) - fy;
         F1a[n][3] = nrand(0,sigR,gen); // Generate and store noise.
-        F1a[n][2] = F1a[n][3] + (1/(fR*f0))*Fa[n][2] + kickStr*cos(xa[n][2])/abs(cos(xa[n][2]))*xa[n][3];
+        F1a[n][2] = F1a[n][3] + (1/(fR*f0))*Fa[n][2] - kickStr*cos(xa[n][2])/abs(cos(xa[n][2]))*xa[n][3];
 
         // Get intermediate position.
         xtemp_a[n][0] = xa[n][0] + F1a[n][0];
@@ -223,7 +223,7 @@ void update_pos_RKII(int na, double xa[][4], double rA, double rSeg[], double sD
         // Implement kicks, fx, fy, and ftheta here (noise is not needed).
         F2a[n][0] = vS*dT*cos(xa[n][2]+F1a[n][2]) - fx;
         F2a[n][1] = vS*dT*sin(xa[n][2]+F1a[n][2]) - fy;
-        F2a[n][2] = (1/(fR*f0))*Fa[n][2] + kickStr*cos(xa[n][2])/abs(cos(xa[n][2]))*xa[n][3];
+        F2a[n][2] = (1/(fR*f0))*Fa[n][2] - kickStr*cos(xa[n][2])/abs(cos(xa[n][2]))*xa[n][3];
     }
 
     // Get F2, passive.

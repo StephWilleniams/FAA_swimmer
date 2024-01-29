@@ -43,7 +43,7 @@ C = readmatrix('../outputs/output_passive.txt');
 unTime = unique(C(:,1));
 theta = linspace(0,2*pi,100);
 
-for i = 1000:1:1101%1600:1:2001%:10:1000%length(unTime)
+for i = 1:1:160000%1600:1:2001%:10:1000%length(unTime)
 
     acts = find(S(:,1) == unTime(i));
     pass = find(C(:,1) == unTime(i));
@@ -60,8 +60,8 @@ for i = 1000:1:1101%1600:1:2001%:10:1000%length(unTime)
             plot( S(acts(n),3)+sDV(3-seg+1)*cos(S(acts(n),5))+rSeg(3-seg+1)*cos(theta) , S(acts(n),4)+sDV(3-seg+1)*sin(S(acts(n),5))+rSeg(3-seg+1)*sin(theta),'g','LineWidth',5)
         end
     end
-    xlim([-10,10])
-    ylim([-10,10])
+    xlim([-30,30])
+    ylim([-30,30])
     pause(0.5)
     hold off;
 

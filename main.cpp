@@ -37,7 +37,8 @@ int main()
 
     for(int t=0; t<nSteps; t++){
         update_pos_RKII(na,xa,rA,rSeg,sDV,np,xp,rP,vA,sigR,sigT,xL,xR,yB,yT,f0,fR,fricPar,fricPerp,kickFreq,kickStr,dT,DT,gen); // Increment particle positions.
-        if((t % 1)==0) {output_pos(t,na,xa,np,xp,RA,DT,outfile_active,outfile_passive);}; // Output particle positions.
+        if((t % 100)==0) {output_pos(t,na,xa,np,xp,RA,DT,outfile_active,outfile_passive);}; // Output particle positions.
+        if((t % int(T/(DT*100)))==0) {cout << 100*double(t)/double(nSteps) << " percent complete." << endl;};  // Update progress.
     }
 
     outfile_active.close(); // Finalise output.
