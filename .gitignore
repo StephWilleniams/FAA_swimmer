@@ -2,5 +2,5 @@
 /ref/*
 a.out 
 /notes/*
-.DS_store
+*.DS_store
 /outputs/
