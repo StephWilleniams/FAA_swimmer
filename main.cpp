@@ -11,9 +11,8 @@ Author: Stephen Williams
 #include "functions_IVP.hpp"
 #include "functions_overhead.hpp"
 
-int main()
+int main(int argc, char* argv[])
 {
-
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
 
@@ -23,7 +22,7 @@ int main()
     // line to make an output of the parameters file.
 
     // Active particle outputs
-    string filename_active = "outputs/output_active.txt"; // Output file name.
+    string filename_active =  "outputs/output_active.txt"; // Output file name.
     ofstream outfile_active = initialise_file(filename_active); // Initialise output.
     // Passive particle outputs
     string filename_passive = "outputs/output_passive.txt"; // Output file name.
@@ -37,7 +36,7 @@ int main()
 
     for(int t=0; t<nSteps; t++){
         update_pos_RKII(na,xa,rA,rSeg,sDV,np,xp,rP,vA,sigR,sigT,xL,xR,yB,yT,f0,fR,fricPar,fricPerp,kickFreq,kickStr,dT,DT,gen); // Increment particle positions.
-        if((t % 100)==0) {output_pos(t,na,xa,np,xp,RA,DT,outfile_active,outfile_passive);}; // Output particle positions.
+        if((t % 50)==0) {output_pos(t,na,xa,np,xp,RA,DT,outfile_active,outfile_passive);}; // Output particle positions.
         if((t % int(T/(DT*100)))==0) {cout << 100*double(t)/double(nSteps) << " percent complete." << endl;};  // Update progress.
     }
 

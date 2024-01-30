@@ -4,9 +4,10 @@
 #include "header.hpp"
 
 // Note: Captialized variables are dimensional (lower case ND).
+//// Indicates a temporarily commented out value for runs.
 
 // Time constants (s).
-double T = 100; // Total runtime (s).
+double T = 10000; // Total runtime (s).
 double DT = 0.0005; // Step size (s) (ND time). 
 // Time constants ND.
 double dT = DT/DT;
