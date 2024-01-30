@@ -10,13 +10,6 @@ close all
 S = readmatrix('outputs/output_active.txt');
 C = readmatrix('outputs/output_passive.txt');
 
-%%
-
-num = 1;
-
-S = readmatrix([num2str(num) '_outputs/output_active.txt']);
-C = readmatrix([num2str(num) '_outputs/output_passive.txt']);
-
 %% pol 1
 
 %rSeg = zeros(3,1);
@@ -50,7 +43,7 @@ sDV = -[rSeg(1) - rA, ...
 unTime = unique(S(:,1));
 theta = linspace(0,2*pi,100);
 
-for i = 10:1:110%1600:1:2001%:10:1000%length(unTime)
+for i = 100:1:110%1600:1:2001%:10:1000%length(unTime)
 
     acts = find(S(:,1) == unTime(i));
     pass = find(C(:,1) == unTime(i));

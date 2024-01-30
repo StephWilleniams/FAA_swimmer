@@ -29,7 +29,7 @@ double rA = RA/RA;
 double rP = RP/RA;
 
 // Particle segement sizes (ND).
-int pol = -1; // Active particle polarisation. +1 for pusher, -1 for puller.
+////int pol = -1; // Active particle polarisation. +1 for pusher, -1 for puller.
 double rSeg[3];
 double  sDV[3];
 
@@ -40,13 +40,13 @@ double vA = VA*DT/RA;
 
 // Diffusion constants (xx^2/s).
 //double DR = 0.5; // Swimmer rotational diffusivity, rad^2/s.
-double DR = 0.2; // (Chlamy) Swimmer rotational diffusivity, rad^2/s.
+////double DR = 0.2; // (Chlamy) Swimmer rotational diffusivity, rad^2/s.
 //double DR = 5.6; // (E Coli) Swimmer rotational diffusivity, rad^2/s.
 double DTherm = 0.1; // Passive particle diffusivity, um^2/s.
 // Diffusion constants ND.
-double dR = DR*DT; 
+////double dR = DR*DT; 
 double dTherm = DTherm*DT/pow(RA,2); 
-double sigR = sqrt(dR);
+////double sigR = sqrt(dR);
 double sigT = sqrt(4*dTherm*dT);
 
 // Friction constants.
@@ -57,10 +57,10 @@ double fricPar = 2*M_PI/(log(a) - 0.207 + (0.980/a)-(0.133/pow(a,2)));
 double fricPerp = 4*M_PI/(log(a) + 0.839 + (0.185/a)+(0.233/pow(a,2)));
 
 // Kick parameters
-double KickFreq = 0; // Kick poisson-process frequency.
-double kickFreq = KickFreq*dT; // ND kick-frequency.
-double KickStr = 0; // Kick rotational 'speed'.
-double kickStr = KickStr*dT; // ND kick rotation per frame.
+//// double KickFreq = 0; // Kick poisson-process frequency.
+//// double kickFreq = KickFreq*dT; // ND kick-frequency.
+//// double KickStr = 0; // Kick rotational 'speed'.
+//// double kickStr = KickStr*dT; // ND kick rotation per frame.
 
 // ND constants.
 const int na = 40; // Number of swimmers

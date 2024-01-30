@@ -13,21 +13,30 @@ Author: Stephen Williams
 
 int main(int argc, char* argv[])
 {
+    /* USER INPUTS */
+    double dR = DT*double(atoi(argv[1]))/100;
+    double sigR = sqrt(dR);
+    int pol = atoi(argv[2]);
+    double KickFreq = double(atoi(argv[3]))/100; // Kick poisson-process frequency.
+    double kickFreq = KickFreq*DT; // ND kick-frequency.
+    double KickStr = double(atoi(argv[4]))/100; // Kick rotational 'speed'.
+    double kickStr = KickStr*DT; // ND kick rotation per frame.
+    /* USER INPUTS */
+
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
 
     cout << "Now starting, running " << T << "s." << endl;
-    
-    // line to mkdir for the outputs. 
-    // line to make an output of the parameters file.
 
     // Active particle outputs
-    string filename_active =  "outputs/output_active.txt"; // Output file name.
+    string filename_active =  string(argv[5]) + "_outputs/output_active.txt"; // Output file name.
     ofstream outfile_active = initialise_file(filename_active); // Initialise output.
     // Passive particle outputs
-    string filename_passive = "outputs/output_passive.txt"; // Output file name.
+    string filename_passive = string(argv[5]) + "_outputs/output_passive.txt"; // Output file name.
     ofstream outfile_passive = initialise_file(filename_passive); // Initialise output.
 
+    // Initialise random seed.
+    mt19937 gen = generate_seed(atoi(argv[5]));
     //zero_IVP(ns,x); // All particles at (x,y)=(0,0).
     //partpair_tester_IVP(ns,xs);
     set_active_geometry(pol,rSeg,sDV);
