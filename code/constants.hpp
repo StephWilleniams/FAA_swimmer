@@ -7,8 +7,9 @@
 //// Indicates a temporarily commented out value for runs.
 
 // Time constants (s).
-double T = 10000; // Total runtime (s).
-double DT = 0.0005; // Step size (s) (ND time). 
+double T = 2000; // Total runtime (s).
+//double DT = 0.0005; // Step size (s) (ND time). 
+double DT = 0.000125; // Step size (s) (ND time). 
 // Time constants ND.
 double dT = DT/DT;
 int nSteps = int(T/DT); // Number of calculated steps.
