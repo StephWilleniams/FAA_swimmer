@@ -1,32 +1,31 @@
-#!/bin/bash  
-#SBATCH --nodes=1  # asked for 1 node
-#SBATCH --ntasks=20 # asked for 20 cores
-#SBATCH --partition test  # this job will submit to test partition
-#SBATCH --mem=96G  #this job is asked for 96G of total memory, use 0 if you want to use entire node memory
-# #SBATCH --gres=gpu:X # uncomment this line if you need GPU access, replace X with number of GPU you need
-# #SBATCH -w <selected_node> #uncomment this line if you want to select specific available node to run 
-#SBATCH --time=0-00:15:00 # 15 minutes  
-#SBATCH --output=test1.qlog  #the output information will put into test1.qlog file
+#!/bin/bash
+#SBATCH --nodes=1  #asked for 1 node
+#SBATCH --ntasks=10 #asked for 1 cores
+# #SBATCH --partition medium  #this job will submit to medium partition
+#SBATCH --array=1-5
+#SBATCH --mem=1G  #this job is asked for 1G of total memory, use 0 if you want to use entire node memory
+#SBATCH --time=0-00:15:00 # 15 minutes
+#SBATCH --output=test_%A_%a.qlog  #the output information will put into test_$SLURM_ARRAY_JOB_ID_$SLURM_ARRAY_TASK_ID.qlog file
 #SBATCH --job-name=test1  #the job name
 #SBATCH --export=ALL
 
-module load parallel
+# # module load parallel
+# # g++ -O3 main.cpp # Compile main, pre-prepare this
 
-g++ -O3 main.cpp # Compile main
+Nruns = 10
 
-kmax = 10 # max kick frequency to calculate
-
-srun="srun -n1 -N1 --exclusive"
-
-parallel="parallel -N 1 --delay .2 -j $SLURM_NTASKS --joblog parallel_joblog --resume"
-
-$parallel "$srun ./runtask arg1:{1}" ::: {1..40}
+# Iterate through numbers 1 to 5
+for i in {1..$Nrun} # Does it do endpoint??
 do
-
-    kf = 100*$i*$kmax/40
-    ks = 100*1
-    echo "$kf"
-    echo "$ks"
-    ./a.out 20 -1 $kf $ks $i # Arguments: (100*dR,polarity,100*kickFreq,100*kickStr,fileLabel)
+  
+  # Print the current number and its square
+  # echo "Number: $SLURM_ARRAY_TASK_ID, Square: $i"
+  echo  "$SLURM_ARRAY_TASK_ID $i"
+  # /a.out $SLURM_ARRAY_TASK_ID $i &
 
 done
+
+echo  "$SLURM_ARRAY_TASK_ID $Nruns"
+#./a.out $SLURM_ARRAY_TASK_ID $Nruns 
+
+wait

@@ -23,9 +23,10 @@ int main(int argc, char* argv[])
 
     double KickStr = double(atoi(argv[4])); // Kick rotational 'speed'.
     double kickStr = KickStr*DT; // ND kick rotation per frame.
-    /* USER INPUTS */
 
     int run_ind = 100*atoi(argv[4]) + atoi(argv[3]);
+
+    /* USER INPUTS */
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
@@ -33,10 +34,10 @@ int main(int argc, char* argv[])
     cout << "Now starting, running " << T << "s." << endl;
 
     // Active particle outputs
-    string filename_active =  string(run_ind) + "_outputs/output_active.txt"; // Output file name.
+    string filename_active = argv[3] + string("_") + string(argv[4]) + string("_outputs/output_active.txt"); // Output file name.
     ofstream outfile_active = initialise_file(filename_active); // Initialise output.
     // Passive particle outputs
-    string filename_passive = string(run_ind) + "_outputs/output_passive.txt"; // Output file name.
+    string filename_passive = argv[3] + string("_") + string(argv[4]) + string("_outputs/output_passive.txt"); // Output file name.
     ofstream outfile_passive = initialise_file(filename_passive); // Initialise output.
 
     // Initialise random seed.
