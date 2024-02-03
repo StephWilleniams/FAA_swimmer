@@ -5,4 +5,4 @@ a.out
 *.DS_store
 /*outputs/
 /goodData/
-/MSS_old/
+/MSS_old/*
