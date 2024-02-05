@@ -35,15 +35,15 @@ sDV = -[rSeg(1) - rA, ...
 
 %%
 
-S = readmatrix('../outputs/output_active.txt');
-C = readmatrix('../outputs/output_passive.txt');
+S = readmatrix('outputs/1_1_outputs/output_active.txt');
+C = readmatrix('outputs/1_1_outputs/output_passive.txt');
 
 %%
 
 unTime = unique(C(:,1));
 theta = linspace(0,2*pi,100);
 
-for i = 1:1:160000%1600:1:2001%:10:1000%length(unTime)
+for i = 1:1:16000%1600:1:2001%:10:1000%length(unTime)
 
     acts = find(S(:,1) == unTime(i));
     pass = find(C(:,1) == unTime(i));
