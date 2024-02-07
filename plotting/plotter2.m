@@ -22,7 +22,7 @@ C = readmatrix([num2str(num) '_outputs/output_passive.txt']);
 %rSeg = zeros(3,1);
 rA = 1;
 rC = 0.5;
-r0 = (4*sqrt(2)/(5*sqrt(2)+2));
+r0 = (4*sqrt(2)/(5*sqrt(2)+2))/2;
 rSeg = [r0 * rA, ...
        r0 * rA/sqrt(2), ...
        r0 * rA/2];

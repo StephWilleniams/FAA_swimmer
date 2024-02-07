@@ -47,7 +47,6 @@ void WCA_force_2(int na, double Fa[][3], double xa[][4], double rA, double rSeg[
                         if( r < pow(2,1/6)*sigma ){
                             Fa[n1][0] -= (24*eps*dx/pow(r,2))*(pow(sigma/r,6)-2*pow(sigma/r,12));
                             Fa[n1][1] -= (24*eps*dy/pow(r,2))*(pow(sigma/r,6)-2*pow(sigma/r,12));
-                            //Fa[n1][2] -= 4*eps*sDV[seg1]*(12*pow(sigma/r,11)-6*pow(sigma/r,6))*(dx*cos(xa[n1][2])-dy*sin(xa[n1][2]))/pow(r,3);
                             Fa[n1][2] -= 24*eps*sDV[seg1]*(pow(sigma/r,6)-2*pow(sigma/r,12))*(dx*sin(xa[n1][2])-dy*cos(xa[n1][2]))/pow(r,2);
                         }
                     }
@@ -67,8 +66,10 @@ void WCA_force_2(int na, double Fa[][3], double xa[][4], double rA, double rSeg[
 
             if(abs(y3-y1) > abs(y2-y1)){dy = y2-y1;}else{dy = y3-y1;} // Get wrapped y
             r = abs(dy); // Get the displacement between the segment and boundary.
-            Fa[n1][1] -= (24*eps*dy/pow(r,2))*(pow(sigma/r,6)-2*pow(sigma/r,12)); // Implement the force.
-            Fa[n1][2] -= 24*eps*sDV[seg1]*(pow(sigma/r,6)-2*pow(sigma/r,12))*(-dy*cos(xa[n1][2]))/pow(r,2);
+            if( r < pow(2,1/6)*sigma ){
+                Fa[n1][1] -= (24*eps*dy/pow(r,2))*(pow(sigma/r,6)-2*pow(sigma/r,12)); // Implement the force.
+                Fa[n1][2] -= 24*eps*sDV[seg1]*(pow(sigma/r,6)-2*pow(sigma/r,12))*(-dy*cos(xa[n1][2]))/pow(r,2);
+            }
         }
 
         // Get comparisons of active-passive forces (back-force).
@@ -103,7 +104,7 @@ void WCA_force_2(int na, double Fa[][3], double xa[][4], double rA, double rSeg[
                 r = sqrt(pow(dx,2) + pow(dy,2)); // Distance between the centers.
 
                 // Implement the WCA potential.
-                if( r < sigma ){
+                if( r < pow(2,1/6)*sigma ){
                     Fp[n1][0] -= (24*eps*dx/pow(r,2))*(1*pow(sigma/r,6)-2*pow(sigma/r,12));
                     Fp[n1][1] -= (24*eps*dy/pow(r,2))*(1*pow(sigma/r,6)-2*pow(sigma/r,12));
                 }
@@ -115,15 +116,14 @@ void WCA_force_2(int na, double Fa[][3], double xa[][4], double rA, double rSeg[
         sigma = rP; // Get the interaction parameter.
         // Get the coordinates of the relative segments.
         y1 = xp[n1][1];
-        y2 = yT;
-        y3 = yB;
-        if(abs(y3-y1) > abs(y2-y1)){dy = y2-y1;}else{dy = y3-y1;} // Get wrapped y.
+        y2 = yT;y3 = yB;
+        if(abs(y3-y1) > abs(y2-y1)){dy = y2-y1;}else{dy = y3-y1;} // Get correct dy.
         r = abs(dy); // Get the distance to the boundary.
-        Fp[n1][1] -= (24*eps*dy/pow(r,2))*(1*pow(sigma/r,6)-2*pow(sigma/r,12)); // Implement the force.
-
+        if( r < pow(2,1/6)*sigma ){
+            Fp[n1][1] -= (24*eps*dy/pow(r,2))*(1*pow(sigma/r,6)-2*pow(sigma/r,12)); // Implement the force.
+        }
         // Get comparisons of passive-passive forces, currently omitted.
         // This can be added in future.
-
     }
 
     return;

@@ -7,3 +7,5 @@ a.out
 /goodData/
 /MSS_old/*
 /code/outputs/
+*.txt
+*.key

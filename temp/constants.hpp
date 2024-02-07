@@ -7,7 +7,7 @@
 //// Indicates a temporarily commented out value for runs.
 
 // Time constants (s).
-double T = 10; // Total runtime (s).
+double T = 1000; // Total runtime (s).
 //double DT = 0.0005; // Step size (s) (ND time). 
 double DT = 0.0005; // Step size (s) (ND time). 
 // Time constants ND.
@@ -20,7 +20,7 @@ double XL = -XR; // System left side.
 double YT = 100;  // System top side.
 double YB = -YT; // System bottom side.
 double RA = 12; // Active particle size (this is the ND-ing length)
-double RP = 0.5; // Passive particle size.
+double RP = 10; // Passive particle size.
 // Length constants ND.
 double xR = XR/RA;
 double xL = XL/RA;
@@ -64,8 +64,8 @@ double fricPerp = 4*M_PI/(log(a) + 0.839 + (0.185/a)+(0.233/pow(a,2)));
 //// double kickStr = KickStr*dT; // ND kick rotation per frame.
 
 // ND constants.
-const int na = 1; // Number of swimmers
-const int np = 1; // Number of colloids
+const int na = 40; // Number of swimmers
+const int np = 40; // Number of colloids
 
 // Arrays.
 double xa[na][4]; // Store for swimmer center positions.

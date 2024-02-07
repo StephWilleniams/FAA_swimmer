@@ -6,9 +6,9 @@
 
 void set_active_geometry(double rA, double pol, double rSeg[], double sDV[]){
     
-    rSeg[0] = (4*sqrt(2)/(5*sqrt(2)+2))*rA;
-    rSeg[1] = (4*sqrt(2)/(5*sqrt(2)+2))*rA/sqrt(2);
-    rSeg[2] = (4*sqrt(2)/(5*sqrt(2)+2))*rA/2;
+    rSeg[0] = (2*sqrt(2)/(5*sqrt(2)+2))*rA;
+    rSeg[1] = (2*sqrt(2)/(5*sqrt(2)+2))*rA/sqrt(2);
+    rSeg[2] = (2*sqrt(2)/(5*sqrt(2)+2))*rA/2;
     sDV[0]  = double(pol)*(rSeg[0] - rA);
     sDV[1]  = double(pol)*(rSeg[0]*2 - rA);
     sDV[2]  = double(pol)*(rSeg[0]*2 + rSeg[1] - rA);

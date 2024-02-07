@@ -35,7 +35,8 @@ int main(int argc, char* argv[])
     ofstream outfile_passive = initialise_file(filename_passive); // Initialise output.
 
     // Initialise random seed.
-    mt19937 gen = generate_seed(run_ind);
+    mt19937 gen = generate_seed(time(NULL));
+    //mt19937 gen = generate_seed(run_ind);
     set_active_geometry(rA,pol,rSeg,sDV);
     //zero_IVP(ns,x); // All particles at (x,y)=(0,0).
     //partpair_tester_IVP(ns,xs);
