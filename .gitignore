@@ -9,3 +9,9 @@ a.out
 /code/outputs/
 *.txt
 *.key
+*.mat
+*.fig
+*.zip
+*.png
+*.mlx
+*.numbers

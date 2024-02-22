@@ -9,18 +9,18 @@ Author: Stephen Williams
 int main(int argc, char* argv[])
 {
     /* USER INPUTS */
-    double dR = 0; //DT*double(atoi(argv[1]))/100.0;
+    double dR = DT*20/100.0;
     double sigR = sqrt(dR);
-    int pol = atoi(argv[2]);
+    int pol = -1;
     
-    double KickFreq = 73; //double(atoi(argv[3]))*0.06667; // Kick poisson-process frequency.
+    double KickFreq = 0.06667; // Kick poisson-process frequency.
     double kickFreq = KickFreq*DT; // ND kick-frequency.
 
-    double KickStr = 10; //0.1 + (5.0-0.1)*(double(atoi(argv[4]))-1)/11.0; // Kick rotational 'speed' (Rad/s).
+    double KickStr = 0.1 ; // Kick rotational 'speed' (Rad/s).
     double kickStr = KickStr*DT; // ND kick rotation per frame.
     /* USER INPUTS */
 
-    int run_ind = 100.0*atoi(argv[4]) + atoi(argv[3]);
+    int run_ind = atoi(argv[1]);
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
@@ -28,20 +28,20 @@ int main(int argc, char* argv[])
     cout << "Now starting, running " << T << "s." << endl;
 
     // Active particle outputs
-    string filename_active = "code/outputs/" + string(argv[3]) + string("_") + string(argv[4]) + string("_outputs/output_active.txt"); // Output file name.
+    string filename_active = "outputs_fine/" + string(argv[1]) + string("_outputs/output_active.txt"); // Output file name.
     ofstream outfile_active = initialise_file(filename_active); // Initialise output.
     // Passive particle outputs
-    string filename_passive = "code/outputs/" + string(argv[3]) + string("_") + string(argv[4]) + string("_outputs/output_passive.txt"); // Output file name.
+    string filename_passive = "outputs_fine/" + string(argv[1]) + string("_outputs/output_passive.txt"); // Output file name.
     ofstream outfile_passive = initialise_file(filename_passive); // Initialise output.
 
     // Initialise random seed.
-    mt19937 gen = generate_seed(time(NULL));
+    mt19937 gen = generate_seed(run_ind);
     //mt19937 gen = generate_seed(run_ind);
     set_active_geometry(rA,pol,rSeg,sDV);
     //zero_IVP(ns,x); // All particles at (x,y)=(0,0).
     //partpair_tester_IVP(ns,xs);
-    partpair_tester_IVP_2(na,xa,np,xp);
-    //no_OL_IVP(na, xa, np, xp, xL, xR, yB, yT, rA, rP, gen); // Uniform distribution, non-overlapping.
+    //partpair_tester_IVP_2(na,xa,np,xp);
+    no_OL_IVP(na, xa, np, xp, xL, xR, yB, yT, rA, rP, gen); // Uniform distribution, non-overlapping.
     output_pos(-1,na,xa,np,xp,RA,DT,outfile_active,outfile_passive); // Output active particle positions.
 
     for(int t=0; t<nSteps; t++){

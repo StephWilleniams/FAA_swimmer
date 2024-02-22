@@ -7,8 +7,8 @@ close all
  
 %%
 
-S = readmatrix('outputs/output_active.txt');
-C = readmatrix('outputs/output_passive.txt');
+S = readmatrix('../code/outputs/1_1_outputs/output_active.txt');
+C = readmatrix('../code/outputs/1_1_outputs/output_passive.txt');
 
 %%
 
@@ -50,7 +50,7 @@ sDV = -[rSeg(1) - rA, ...
 unTime = unique(S(:,1));
 theta = linspace(0,2*pi,100);
 
-for i = 10:1:110%1600:1:2001%:10:1000%length(unTime)
+for i = 3000:5:4000%1600:1:2001%:10:1000%length(unTime)
 
     acts = find(S(:,1) == unTime(i));
     pass = find(C(:,1) == unTime(i));
@@ -64,12 +64,16 @@ for i = 10:1:110%1600:1:2001%:10:1000%length(unTime)
 
     for n = 1:nS
         for seg = 1:3
-            plot( S(acts(n),3)+sDV(3-seg+1)*cos(S(acts(n),5))+rSeg(3-seg+1)*cos(theta) , S(acts(n),4)+sDV(3-seg+1)*sin(S(acts(n),5))+rSeg(3-seg+1)*sin(theta),'g','LineWidth',5)
+            if S(acts(n),6) == 0
+                plot( S(acts(n),3)+sDV(3-seg+1)*cos(S(acts(n),5))+rSeg(3-seg+1)*cos(theta) , S(acts(n),4)+sDV(3-seg+1)*sin(S(acts(n),5))+rSeg(3-seg+1)*sin(theta),'g','LineWidth',5)
+            else
+                plot( S(acts(n),3)+sDV(3-seg+1)*cos(S(acts(n),5))+rSeg(3-seg+1)*cos(theta) , S(acts(n),4)+sDV(3-seg+1)*sin(S(acts(n),5))+rSeg(3-seg+1)*sin(theta),'r','LineWidth',5)
+            end
         end
     end
-    xlim([-45,45])
-    ylim([-85,85])
-    pause(0.5)
+    xlim([5,20])
+    ylim([-9,-4])
+    pause(0.1)
     hold off;
 
 end
