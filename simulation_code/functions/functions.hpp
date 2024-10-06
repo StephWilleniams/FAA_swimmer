@@ -7,7 +7,7 @@
 // WCA potential, 3-part active particle, includes passive.
 void WCA_force_2(int na, double Fa[][3], double xa[][4], double rA, double rSeg[], double sDV[], int np, double Fp[][2], double xp[][3], double rP, double xR, double xL, double yB, double yT){
 
-    double sigma; double eps = 0.005;
+    double sigma; double eps = 5e-6;
     double r; double x1; double x2; double y1; double y2; double y3; double dx; double dy;
 
     // Calulate the forces on the active particles.

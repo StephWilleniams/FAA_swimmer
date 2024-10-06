@@ -1,12 +1,15 @@
 
-/ref/*
+ref/
+notes/
+goodData/
+code/outputs/
+data/
+paper/
+
 a.out 
-/notes/*
 *.DS_store
 /*outputs/
-/goodData/
-/MSS_old/*
-/code/outputs/
+
 *.txt
 *.key
 *.mat
